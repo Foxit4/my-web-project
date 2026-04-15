@@ -1,65 +1,126 @@
+/* ЧАСТИНА 1. БАЗОВЕ СКИНУТИ */
 *, *::before, *::after {
-  box-sizing: border-box;
-}
-
-main {
-  padding: 0 15px;
+    box-sizing: border-box;
 }
 
 :root {
-  --primary-color: #2563eb; 
-  --text-color: #1e293b;    
-  --bg-color: #f8fafc;      
+    --primary-color: #2563eb; 
+    --text-color: #1e293b;    
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+}
+
+/* ЧАСТИНА 2. ТИПОГРАФІКА (rem) */
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--bg-color); 
-  color: var(--text-color);           
-  font-family: sans-serif; 
-  margin: 0;
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif; /* Google Font */
+    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ЧАСТИНА 2. ТИПОГРАФІКА (clamp) */
+h1, h2, h3 {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2;
+    color: var(--primary-color);
 }
 
 h1 {
-  color: var(--primary-color);
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+/* ЧАСТИНА 4. КОНТРОЛЬ ДОВЖИНИ РЯДКА */
+main {
+    max-width: 70ch; /* Текст не розтягується більше ніж на 70 символів */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ЧАСТИНА 3. ДОСТУПНІСТЬ (WCAG) */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Видимий фокус (Обов'язково для Lighthouse) */
+a:focus,
+button:focus {
+    outline: 3px solid #000;
+    outline-offset: 3px;
+}
+
+/* НАВІГАЦІЯ */
+header {
+    background: #fff;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ddd;
 }
 
 nav ul {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  list-style: none;
-  padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
 }
 
 @media (min-width: 768px) {
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-
-  nav ul {
-    flex-direction: row;
-  }
+    header {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    nav ul {
+        flex-direction: row;
+    }
 }
+
+/* КАРТКИ (GRID) */
 .projects-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
 }
 
 .project-card {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: var(--card-bg);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary-color);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    text-align: center;
+    padding: 3rem 1rem;
+    margin-top: 4rem;
+    background: #f1f5f9;
 }
