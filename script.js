@@ -1,83 +1,79 @@
 console.log("JS connected!");
 
-// 1. Дані (Частина 2)
+
+async function loadPosts() {
+    const loading = document.querySelector('#loading');
+    const container = document.querySelector('#posts-container');
+
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+
+        if (!response.ok) {
+            throw new Error('Помилка завантаження даних');
+        }
+
+        const data = await response.json();
+
+        // Рендеримо перші 5 постів
+        const html = data.slice(0, 5)
+            .map(post => `
+                <div class="post">
+                    <h3>${post.title}</h3>
+                    <p>${post.body}</p>
+                </div>
+            `)
+            .join('');
+
+        container.innerHTML = html;
+        loading.style.display = 'none'; // Ховаємо статус завантаження
+
+    } catch (error) {
+        console.error(error);
+        loading.textContent = 'Помилка завантаження даних';
+        loading.style.color = 'red';
+    }
+}
+
+loadPosts();
+
+
 const projects = [
     { id: 1, title: "Сайт-візитка", tech: "HTML/CSS" },
     { id: 2, title: "Todo App", tech: "JavaScript" },
-    { id: 3, title: "Портфоліо", tech: "HTML/CSS/JS" },
-    { id: 4, title: "Агро-Проєкт", tech: "MATLAB/JS" },
-    { id: 5, title: "Магазин", tech: "React" }
+    { id: 3, title: "Портфоліо", tech: "HTML/CSS/JS" }
 ];
 
-const container = document.querySelector('#projects-container');
+const projectsContainer = document.querySelector('#projects-container');
 const searchInput = document.querySelector('#search-input');
 
-// 2. Функція створення HTML через шаблонні рядки (Частина 2)
-function createProjectCard(project) {
-    return `
-        <article class="project-card">
-            <h3>${project.title}</h3>
-            <p>Технології: ${project.tech}</p>
-        </article>
-    `;
-}
-
-// 3. Функція рендерингу через MAP (Частина 4)
 function renderProjects(list) {
-    if (!container) return;
-    
-    // Створюємо HTML і вставляємо в контейнер
-    container.innerHTML = list.map(project => createProjectCard(project)).join('');
+    if (!projectsContainer) return;
+    projectsContainer.innerHTML = list.map(p => `
+        <div class="project-card">
+            <h3>${p.title}</h3>
+            <p>${p.tech}</p>
+        </div>
+    `).join('');
 }
 
-// Початковий запуск
 renderProjects(projects);
 
-// 4. Пошук/Фільтрація (Частина 5)
 if (searchInput) {
-    searchInput.addEventListener('input', () => {
-        const value = searchInput.value.toLowerCase();
-        
-        const filtered = projects.filter(project => 
-            project.title.toLowerCase().includes(value) || 
-            project.tech.toLowerCase().includes(value)
-        );
-        
+    searchInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase();
+        const filtered = projects.filter(p => p.title.toLowerCase().includes(value));
         renderProjects(filtered);
     });
 }
 
-// --- Попередній функціонал (Тема та Модалка) ---
-
 const themeBtn = document.querySelector('#theme-toggle');
-if (themeBtn) {
-    themeBtn.addEventListener('click', () => document.body.classList.toggle('dark-theme'));
-}
+if (themeBtn) themeBtn.addEventListener('click', () => document.body.classList.toggle('dark-theme'));
 
+const modal = document.querySelector('#modal');
 const openBtn = document.querySelector('#open-modal');
 const closeBtn = document.querySelector('#close-modal');
-const modal = document.querySelector('#modal');
 
 if (openBtn && closeBtn && modal) {
     openBtn.addEventListener('click', () => modal.classList.add('is-open'));
     closeBtn.addEventListener('click', () => modal.classList.remove('is-open'));
-}
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal) modal.classList.remove('is-open');
-});
-
-const form = document.querySelector('#contact-form');
-if (form) {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const nameInput = document.querySelector('#user-name');
-        if (nameInput.value.trim().length < 2) {
-            alert("Ім'я занадто коротке");
-        } else {
-            alert(`Дякую, ${nameInput.value}! Форму відправлено.`);
-            modal.classList.remove('is-open');
-            form.reset();
-        }
-    });
 }
